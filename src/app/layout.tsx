@@ -1,6 +1,7 @@
 "use client"
 import './globals.css'
 import { useState } from 'react'
+import Link from 'next/link'
 
 export default function RootLayout({
   children,
@@ -23,18 +24,18 @@ export default function RootLayout({
                 
                 {/* Desktop Navigation */}
                 <div className="hidden sm:ml-8 sm:flex sm:space-x-8">
-                  <a href="/" className="inline-flex items-center px-2 pt-1 font-serif text-lg text-amber-900 hover:text-amber-700">
+                  <Link href="/" className="inline-flex items-center px-2 pt-1 font-serif text-lg text-amber-900 hover:text-amber-700">
                     Hjem
-                  </a>
-                  <a href="/om-oss" className="inline-flex items-center px-2 pt-1 font-serif text-lg text-amber-800 hover:text-amber-700">
+                  </Link>
+                  <Link href="/om-oss" className="inline-flex items-center px-2 pt-1 font-serif text-lg text-amber-800 hover:text-amber-700">
                     Om oss
-                  </a>
-                  <a href="/produkter" className="inline-flex items-center px-2 pt-1 font-serif text-lg text-amber-800 hover:text-amber-700">
+                  </Link>
+                  <Link href="/produkter" className="inline-flex items-center px-2 pt-1 font-serif text-lg text-amber-800 hover:text-amber-700">
                     Produkter
-                  </a>
-                  <a href="/kontakt" className="inline-flex items-center px-2 pt-1 font-serif text-lg text-amber-800 hover:text-amber-700">
+                  </Link>
+                  <Link href="/kontakt" className="inline-flex items-center px-2 pt-1 font-serif text-lg text-amber-800 hover:text-amber-700">
                     Kontakt
-                  </a>
+                  </Link>
                 </div>
               </div>
 
@@ -82,30 +83,30 @@ export default function RootLayout({
             {/* Mobile menu */}
             <div className={`${isMenuOpen ? 'block' : 'hidden'} sm:hidden pb-4`}>
               <div className="flex flex-col space-y-2">
-                <a
+                <Link
                   href="/"
                   className="px-3 py-2 rounded-md text-base font-medium text-amber-900 hover:text-amber-700 hover:bg-orange-200"
                 >
                   Hjem
-                </a>
-                <a
+                </Link>
+                <Link
                   href="/om-oss"
                   className="px-3 py-2 rounded-md text-base font-medium text-amber-900 hover:text-amber-700 hover:bg-orange-200"
                 >
                   Om oss
-                </a>
-                <a
+                </Link>
+                <Link
                   href="/produkter"
                   className="px-3 py-2 rounded-md text-base font-medium text-amber-900 hover:text-amber-700 hover:bg-orange-200"
                 >
                   Produkter
-                </a>
-                <a
+                </Link>
+                <Link
                   href="/kontakt"
                   className="px-3 py-2 rounded-md text-base font-medium text-amber-900 hover:text-amber-700 hover:bg-orange-200"
                 >
                   Kontakt
-                </a>
+                </Link>
               </div>
             </div>
           </nav>

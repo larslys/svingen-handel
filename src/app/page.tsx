@@ -1,16 +1,20 @@
+import Image from 'next/image'
+
 export default function Home() {
   return (
     <div className="space-y-12">
-      {/* Hero section med responsiv tekst */}
+      {/* Hero section */}
       <section className="py-12 px-4 sm:px-6 lg:px-8 bg-orange-100 rounded-lg shadow-md">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-8">
           <div className="w-full md:w-1/4">
             <div className="max-w-[200px] mx-auto">
-              <div className="aspect-square rounded-full overflow-hidden border-4 border-amber-200 shadow-lg">
-                <img
-                  src="images/oistein og livmette.jpg"
+              <div className="aspect-square rounded-full overflow-hidden border-4 border-amber-200 shadow-lg relative">
+                <Image
+                  src="/images/oistein og livmette.jpg"
                   alt="Et utvalg av våre hjemmelagde kaker og bakst"
-                  className="w-full h-full object-cover"
+                  width={200}
+                  height={200}
+                  className="object-cover"
                 />
               </div>
             </div>

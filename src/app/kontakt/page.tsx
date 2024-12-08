@@ -12,12 +12,10 @@ const defaultCenter = {
   lng: 10.5358183
 };
 
-//const address = "Markakleiva 24, 2760 Brandbu";
-const address = "Ringdalslinna 96, 2750 Gran";
+const address = "Markakleiva 26, 2760 Brandbu";
 
 export default function Kontakt() {
   const [center, setCenter] = useState(defaultCenter);
-  const [isLoaded, setIsLoaded] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -28,7 +26,6 @@ export default function Kontakt() {
   const [status, setStatus] = useState('')
 
   const handleLoad = (map) => {
-    setIsLoaded(true);
     const geocoder = new window.google.maps.Geocoder();
     
     geocoder.geocode({ address: address }, (results, status) => {
@@ -69,7 +66,7 @@ export default function Kontakt() {
       } else {
         setStatus('error')
       }
-    } catch (error) {
+    } catch {
       setStatus('error')
     }
   }
