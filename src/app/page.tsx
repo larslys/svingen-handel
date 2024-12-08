@@ -9,13 +9,13 @@ export default function Home() {
           <div className="w-full md:w-1/4">
             <div className="max-w-[200px] mx-auto">
               <div className="aspect-square rounded-full overflow-hidden border-4 border-amber-200 shadow-lg relative">
-                <Image
-                  src="/images/oistein og livmette.jpg"
-                  alt="Et utvalg av våre hjemmelagde kaker og bakst"
-                  width={200}
-                  height={200}
-                  className="object-cover"
-                />
+              <Image
+                src="/images/svingen-handel.jpg"
+                alt="Et utvalg av våre hjemmelagde kaker og bakst"
+                width={200}
+                height={200}
+                className="object-cover"
+              />
               </div>
             </div>
           </div>
