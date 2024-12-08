@@ -2,6 +2,7 @@
 import './globals.css'
 import { useState } from 'react'
 import Link from 'next/link'
+import { siteConfig } from '@/config/site'
 
 export default function RootLayout({
   children,
@@ -19,7 +20,7 @@ export default function RootLayout({
               <div className="flex items-center">
                 {/* Logo */}
                 <div className="flex-shrink-0 flex items-center">
-                  <h1 className="text-2xl font-serif font-bold text-amber-900">Svingen Handel og Kafe</h1>
+                  <h1 className="text-2xl font-serif font-bold text-amber-900">{siteConfig.name}</h1>
                 </div>
                 
                 {/* Desktop Navigation */}
@@ -86,24 +87,28 @@ export default function RootLayout({
                 <Link
                   href="/"
                   className="px-3 py-2 rounded-md text-base font-medium text-amber-900 hover:text-amber-700 hover:bg-orange-200"
+                  onClick={() => setIsMenuOpen(false)} 
                 >
                   Hjem
                 </Link>
                 <Link
                   href="/om-oss"
                   className="px-3 py-2 rounded-md text-base font-medium text-amber-900 hover:text-amber-700 hover:bg-orange-200"
+                  onClick={() => setIsMenuOpen(false)} 
                 >
                   Om oss
                 </Link>
                 <Link
                   href="/produkter"
                   className="px-3 py-2 rounded-md text-base font-medium text-amber-900 hover:text-amber-700 hover:bg-orange-200"
+                  onClick={() => setIsMenuOpen(false)} 
                 >
                   Produkter
                 </Link>
                 <Link
                   href="/kontakt"
                   className="px-3 py-2 rounded-md text-base font-medium text-amber-900 hover:text-amber-700 hover:bg-orange-200"
+                  onClick={() => setIsMenuOpen(false)} 
                 >
                   Kontakt
                 </Link>
@@ -124,23 +129,22 @@ export default function RootLayout({
               <div className="bg-amber-50 p-6 rounded-lg shadow-md">
                 <h3 className="text-xl font-serif font-bold text-amber-900 mb-4">Åpningstider</h3>
                 <div className="space-y-2 text-amber-800">
-                  <p>Mandag - Fredag: 10-18</p>
-                  <p>Lørdag: 10-16</p>
-                  <p>Søndag: Stengt</p>
+                  <p>Mandag - Fredag: {siteConfig.hours.weekdays}</p>
+                  <p>Lørdag: {siteConfig.hours.saturday}</p>
+                  <p>Søndag: {siteConfig.hours.sunday}</p>
                 </div>
               </div>
               <div className="bg-amber-50 p-6 rounded-lg shadow-md">
                 <h3 className="text-xl font-serif font-bold text-amber-900 mb-4">Kontakt</h3>
                 <div className="space-y-2 text-amber-800">
-                  <p>Telefon: 123 45 678</p>
-                  <p>E-post: post@svingen.no</p>
+                  <p>Telefon: {siteConfig.contact.phone}</p>
+                  <p>E-post: {siteConfig.contact.email}</p>
                 </div>
               </div>
               <div className="bg-amber-50 p-6 rounded-lg shadow-md">
                 <h3 className="text-xl font-serif font-bold text-amber-900 mb-4">Besøk oss</h3>
                 <div className="space-y-2 text-amber-800">
-                  <p>Markakleiva 26</p>
-                  <p>2760 Brandbu</p>
+                  <p>{siteConfig.contact.address}</p>
                 </div>
               </div>
             </div>

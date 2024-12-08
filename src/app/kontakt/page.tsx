@@ -1,6 +1,7 @@
 "use client"
 import { useState } from 'react'
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
+import { siteConfig } from '@/config/site'
 
 const containerStyle = {
   width: '100%',
@@ -11,8 +12,6 @@ const defaultCenter = {
   lat: 60.3651326,
   lng: 10.5358183
 };
-
-const address = "Ringdalslinna 96, Gran, Norway, 2750";
 
 export default function Kontakt() {
   const [center, setCenter] = useState(defaultCenter);
@@ -28,7 +27,7 @@ export default function Kontakt() {
   const handleLoad = (map: google.maps.Map): void => {
     const geocoder = new window.google.maps.Geocoder();
     
-    geocoder.geocode({ address: address }, (results, status) => {
+    geocoder.geocode({ address: siteConfig.contact.address }, (results, status) => {
       console.log('Geocoding status:', status);
       console.log('Geocoding results:', results);
       
@@ -94,24 +93,23 @@ export default function Kontakt() {
             <div className="space-y-6 text-amber-800">
               <div>
                 <h3 className="font-bold mb-2">Adresse</h3>
-                <p>{address}</p>
+                <p>{siteConfig.contact.address}</p>
               </div>
               
               <div>
                 <h3 className="font-bold mb-2">Telefon</h3>
-                <p>123 45 678</p>
+                <p>{siteConfig.contact.phone}</p>
               </div>
               
               <div>
                 <h3 className="font-bold mb-2">E-post</h3>
-                <p>post@svingen.no</p>
+                <p>{siteConfig.contact.email}</p>
               </div>
               
               <div>
                 <h3 className="font-bold mb-2">Åpningstider</h3>
-                <p>Mandag - Fredag: 10:00 - 18:00</p>
-                <p>Lørdag: 10:00 - 16:00</p>
-                <p>Søndag: Stengt</p>
+                <p>Lørdag: {siteConfig.hours.saturday}</p>
+                <p>Søndag: {siteConfig.hours.sunday}</p>
               </div>
             </div>
           </div>
@@ -141,7 +139,7 @@ export default function Kontakt() {
               >
                 <Marker 
                   position={center}
-                  title="Svingen Handel og Kafe"
+                  title={siteConfig.name}
                 />
               </GoogleMap>
             </LoadScript>
