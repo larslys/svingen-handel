@@ -2,10 +2,6 @@
 import { useState } from 'react'
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
 
-interface MapProps {
-  setCenter: (center: { lat: number; lng: number }) => void;
-}
-
 const containerStyle = {
   width: '100%',
   height: '300px'
@@ -32,29 +28,23 @@ export default function Kontakt() {
   const handleLoad = (map: google.maps.Map): void => {
     const geocoder = new window.google.maps.Geocoder();
     
-    geocoder.geocode(
-      { address: address },
-      (
-        results: google.maps.GeocoderResult[] | null,
-        status: google.maps.GeocoderStatus
-      ) => {
-        console.log('Geocoding status:', status);
-        console.log('Geocoding results:', results);
-        
-        if (status === 'OK' && results && results[0]) {
-          const location = results[0].geometry.location;
-          const newCenter = {
-            lat: location.lat(),
-            lng: location.lng()
-          };
-          console.log('New center:', newCenter);
-          setCenter(newCenter);
-          map.setCenter(newCenter);
-        } else {
-          console.error('Geocoding failed:', status);
-        }
+    geocoder.geocode({ address: address }, (results, status) => {
+      console.log('Geocoding status:', status);
+      console.log('Geocoding results:', results);
+      
+      if (status === 'OK' && results && results[0]) {
+        const location = results[0].geometry.location;
+        const newCenter = {
+          lat: location.lat(),
+          lng: location.lng()
+        };
+        console.log('New center:', newCenter);
+        setCenter(newCenter);
+        map.setCenter(newCenter);
+      } else {
+        console.error('Geocoding failed:', status);
       }
-    );
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
