@@ -31,9 +31,17 @@ export default function Kontakt() {
   const [isMapLoading, setIsMapLoading] = useState(true);
   const [formData, setFormData] = useState(INITIAL_FORM_STATE);
   const [status, setStatus] = useState('')
-  const [_errors, setErrors] = useState<Record<string, string>>({});
 
-  const libraries = useMemo(() => ['geocoding'], []);
+  //const [_errors, setErrors] = useState<Record<string, string>>({});
+  // Enten bruk _errors eller fjern det
+const [errors, setErrors] = useState<Record<string, string>>({});
+
+// Og så bruk errors i form-validering visning:
+{errors.email && (
+  <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+)}
+
+  //const libraries = useMemo(() => ['geocoding'], []);
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
