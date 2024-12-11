@@ -30,18 +30,8 @@ export default function Kontakt() {
   const [center, setCenter] = useState(defaultCenter);
   const [isMapLoading, setIsMapLoading] = useState(true);
   const [formData, setFormData] = useState(INITIAL_FORM_STATE);
-  const [status, setStatus] = useState('')
-
-  //const [_errors, setErrors] = useState<Record<string, string>>({});
-  // Enten bruk _errors eller fjern det
-const [errors, setErrors] = useState<Record<string, string>>({});
-
-// Og så bruk errors i form-validering visning:
-{errors.email && (
-  <p className="text-red-500 text-sm mt-1">{errors.email}</p>
-)}
-
-  //const libraries = useMemo(() => ['geocoding'], []);
+  const [status, setStatus] = useState('');
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -55,37 +45,29 @@ const [errors, setErrors] = useState<Record<string, string>>({});
   const handleLoad = (map: google.maps.Map): void => {
     const geocoder = new window.google.maps.Geocoder();
     
-    // Definer en Promise-basert geocoding funksjon
-    function geocodeAddress(): Promise<void> {
-      return new Promise((resolve, reject) => {
-        geocoder.geocode({ address: siteConfig.contact.address }, (results, status) => {
-          if (status === 'OK' && results && results[0]) {
-            const location = results[0].geometry.location;
-            const newCenter = {
-              lat: location.lat(),
-              lng: location.lng()
-            };
-            setCenter(newCenter);
-            map.setCenter(newCenter);
-            resolve();
-          } else {
-            console.error('Geocoding failed:', status);
-            reject(new Error(`Geocoding failed: ${status}`));
-          }
-        });
+    function performGeocoding() {
+      geocoder.geocode({ address: siteConfig.contact.address }, (results, status) => {
+        if (status === 'OK' && results && results[0]) {
+          const location = results[0].geometry.location;
+          const newCenter = {
+            lat: location.lat(),
+            lng: location.lng()
+          };
+          setCenter(newCenter);
+          map.setCenter(newCenter);
+        } else {
+          console.error('Geocoding failed:', status);
+        }
       });
     }
-  
-    // Kall funksjonen
-    geocodeAddress().catch(error => {
-      console.error('Error during geocoding:', error);
-    });
+
+    performGeocoding();
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
     if (!validateForm()) return;
-    setStatus('sending')
+    setStatus('sending');
 
     try {
       const response = await fetch('/api/contact', {
@@ -94,18 +76,19 @@ const [errors, setErrors] = useState<Record<string, string>>({});
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
-      })
+      });
 
       if (response.ok) {
-        setStatus('success')
-        setFormData(INITIAL_FORM_STATE)
+        setStatus('success');
+        setFormData(INITIAL_FORM_STATE);
       } else {
-        setStatus('error')
+        setStatus('error');
       }
     } catch {
-      setStatus('error')
+      setStatus('error');
     }
-  }
+  };
+
 
   return (
     <div className="space-y-12">

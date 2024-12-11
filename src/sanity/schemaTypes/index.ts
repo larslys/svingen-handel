@@ -1,8 +1,7 @@
-// src/app/sanity/schemaTypes/index.ts
-import contactInfo from './contactInfo'
+// src/sanity/schemaTypes/index.ts
 import products from './products'
+import contactInfo from './contactInfo'
 
-export default [
-  contactInfo,
-  products
-]
+const schemas = [products, contactInfo]
+
+export default schemas
