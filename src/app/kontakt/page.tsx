@@ -33,6 +33,16 @@ export default function Kontakt() {
   const [status, setStatus] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
 
+
+  // Og så bruk errors i form-validering visning:
+{errors.email && (
+  <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+)}
+
+
+
+
+
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
     if (formData.email && !/\S+@\S+\.\S+/.test(formData.email)) {
