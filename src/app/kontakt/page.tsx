@@ -31,7 +31,7 @@ export default function Kontakt() {
   const [isMapLoading, setIsMapLoading] = useState(true);
   const [formData, setFormData] = useState(INITIAL_FORM_STATE);
   const [status, setStatus] = useState('')
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [_errors, setErrors] = useState<Record<string, string>>({});
 
   const libraries = useMemo(() => ['geocoding'], []);
 

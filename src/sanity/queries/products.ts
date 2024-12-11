@@ -1,6 +1,15 @@
 // src/sanity/queries/products.ts
 import { client } from '../lib/client'
 
+// Definer interface for produkt-strukturen
+export interface Product {
+  _id: string
+  title: string
+  description?: string  // ? betyr at feltet er valgfritt
+  price?: number
+  category: string
+}
+
 export const productsQuery = `
   *[_type == "products"]{
     _id,
@@ -11,20 +20,20 @@ export const productsQuery = `
   }
 `
 
-export async function getProducts() {
+export async function getProducts(): Promise<Product[]> {
   try {
     console.log('Starter spørring mot Sanity...')
     
-    const products = await client.fetch(productsQuery)
+    const products = await client.fetch<Product[]>(productsQuery)
     
     // Logger hvert produkt og deres kategorier
     console.log('Produkter fra Sanity:')
-    products.forEach((product: any) => {
+    products.forEach((product: Product) => {
       console.log(`- ${product.title}: kategori = "${product.category}"`)
     })
     
     // Logger unike kategorier
-    const uniqueCategories = [...new Set(products.map((p: any) => p.category))]
+    const uniqueCategories = [...new Set(products.map((p: Product) => p.category))]
     console.log('Unike kategorier i databasen:', uniqueCategories)
     
     return products
@@ -34,10 +43,17 @@ export async function getProducts() {
   }
 }
 
-export async function checkSanityConnection() {
+interface SanityConnectionResult {
+  success: boolean
+  productCount?: number
+  categories?: string[]
+  error?: unknown
+}
+
+export async function checkSanityConnection(): Promise<SanityConnectionResult> {
   try {
-    const products = await client.fetch('*[_type == "products"]')
-    const categories = [...new Set(products.map((p: any) => p.category))]
+    const products = await client.fetch<Product[]>('*[_type == "products"]')
+    const categories = [...new Set(products.map((p: Product) => p.category))]
     
     return { 
       success: true, 
