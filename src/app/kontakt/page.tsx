@@ -1,5 +1,5 @@
 "use client"
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
 import { siteConfig } from '@/config/site'
 
@@ -13,31 +13,47 @@ const defaultCenter = {
   lng: 10.5358183
 };
 
+const FORM_TYPES = {
+  CONTACT: 'contact',
+  ORDER: 'order'
+} as const;
+
+const INITIAL_FORM_STATE = {
+  name: '',
+  email: '',
+  phone: '',
+  message: '',
+  type: FORM_TYPES.CONTACT
+};
+
 export default function Kontakt() {
   const [center, setCenter] = useState(defaultCenter);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    message: '',
-    type: 'contact'
-  });
+  const [isMapLoading, setIsMapLoading] = useState(true);
+  const [formData, setFormData] = useState(INITIAL_FORM_STATE);
   const [status, setStatus] = useState('')
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const libraries = useMemo(() => ['geocoding'], []);
+
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+    if (formData.email && !/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Vennligst skriv inn en gyldig e-postadresse';
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleLoad = (map: google.maps.Map): void => {
     const geocoder = new window.google.maps.Geocoder();
     
     geocoder.geocode({ address: siteConfig.contact.address }, (results, status) => {
-      console.log('Geocoding status:', status);
-      console.log('Geocoding results:', results);
-      
       if (status === 'OK' && results && results[0]) {
         const location = results[0].geometry.location;
         const newCenter = {
           lat: location.lat(),
           lng: location.lng()
         };
-        console.log('New center:', newCenter);
         setCenter(newCenter);
         map.setCenter(newCenter);
       } else {
@@ -48,6 +64,7 @@ export default function Kontakt() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    if (!validateForm()) return;
     setStatus('sending')
 
     try {
@@ -61,7 +78,7 @@ export default function Kontakt() {
 
       if (response.ok) {
         setStatus('success')
-        setFormData({ name: '', email: '', phone: '', message: '', type: 'contact' })
+        setFormData(INITIAL_FORM_STATE)
       } else {
         setStatus('error')
       }
@@ -72,7 +89,6 @@ export default function Kontakt() {
 
   return (
     <div className="space-y-12">
-      {/* Hovedseksjon */}
       <section className="bg-orange-100 rounded-lg p-8 shadow-md">
         <h1 className="text-3xl md:text-4xl font-serif font-bold text-amber-900 text-center mb-6">
           Kontakt Oss
@@ -84,7 +100,6 @@ export default function Kontakt() {
       </section>
 
       <div className="grid md:grid-cols-2 gap-8">
-        {/* Kontaktinformasjon med kart */}
         <section className="bg-white rounded-lg shadow-md border-2 border-amber-200">
           <div className="p-8">
             <h2 className="text-2xl font-serif font-bold text-amber-900 mb-6">
@@ -114,8 +129,8 @@ export default function Kontakt() {
             </div>
           </div>
           
-          {/* Google Maps */}
           <div className="h-[300px] w-full rounded-b-lg overflow-hidden">
+            {isMapLoading && <div className="h-full w-full flex items-center justify-center bg-gray-100">Laster kart...</div>}
             <LoadScript 
               googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''}
               libraries={['geocoding']}
@@ -124,7 +139,10 @@ export default function Kontakt() {
                 mapContainerStyle={containerStyle}
                 center={center}
                 zoom={15}
-                onLoad={handleLoad}
+                onLoad={(map) => {
+                  setIsMapLoading(false);
+                  handleLoad(map);
+                }}
                 options={{
                   styles: [
                     {
@@ -132,7 +150,7 @@ export default function Kontakt() {
                       elementType: "all",
                       stylers: [
                         { saturation: -20 }
-                      ]
+                  ]
                     }
                   ]
                 }}
@@ -145,9 +163,7 @@ export default function Kontakt() {
             </LoadScript>
           </div>
         </section>
-
-        {/* Kontaktskjema */}
-        <section className="bg-white rounded-lg p-8 shadow-md border-2 border-amber-200">
+      <section className="bg-white rounded-lg p-8 shadow-md border-2 border-amber-200">
           <h2 className="text-2xl font-serif font-bold text-amber-900 mb-6">
             Send oss en melding
           </h2>
@@ -163,10 +179,10 @@ export default function Kontakt() {
                 className="w-full p-2 border border-amber-200 rounded-md"
                 required
               >
-                <option value="contact">Generell henvendelse</option>
-                <option value="order">Bestilling</option>
+                <option value={FORM_TYPES.CONTACT}>Generell henvendelse</option>
+                <option value={FORM_TYPES.ORDER}>Bestilling</option>
               </select>
-            </div>
+    </div>
             
             <div>
               <label htmlFor="name" className="block text-amber-800 mb-1">
@@ -245,7 +261,6 @@ export default function Kontakt() {
         </section>
       </div>
 
-      {/* Bestillingsinformasjon */}
       <section className="bg-white rounded-lg p-8 shadow-md border-2 border-amber-200">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-2xl font-serif font-bold text-amber-900 mb-4">
