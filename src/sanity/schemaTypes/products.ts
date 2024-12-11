@@ -1,26 +1,28 @@
-// src/app/sanity/schemaTypes/products.ts
-export default {
+// src/sanity/schemaTypes/products.ts
+import { defineField, defineType } from 'sanity'
+
+const productsSchema = defineType({
   name: 'products',
   title: 'Produkter',
   type: 'document',
   fields: [
-    {
+    defineField({
       name: 'title',
       title: 'Navn',
       type: 'string',
-      validation: (Rule: any) => Rule.required()
-    },
-    {
+      validation: rule => rule.required()
+    }),
+    defineField({
       name: 'description',
       title: 'Beskrivelse',
       type: 'text'
-    },
-    {
+    }),
+    defineField({
       name: 'price',
       title: 'Pris',
       type: 'number'
-    },
-    {
+    }),
+    defineField({
       name: 'category',
       title: 'Kategori',
       type: 'string',
@@ -34,7 +36,9 @@ export default {
           { title: 'Andre Godsaker', value: 'Andre Godsaker' }
         ]
       },
-      validation: (Rule: any) => Rule.required()
-    }
+      validation: rule => rule.required()
+    })
   ]
-}
+})
+
+export default productsSchema

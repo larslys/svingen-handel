@@ -55,24 +55,31 @@ const [errors, setErrors] = useState<Record<string, string>>({});
   const handleLoad = (map: google.maps.Map): void => {
     const geocoder = new window.google.maps.Geocoder();
     
-    // Wrap geocode-kallet i en funksjon og kall den
-    const performGeocoding = () => {
-      geocoder.geocode({ address: siteConfig.contact.address }, (results, status) => {
-        if (status === 'OK' && results && results[0]) {
-          const location = results[0].geometry.location;
-          const newCenter = {
-            lat: location.lat(),
-            lng: location.lng()
-          };
-          setCenter(newCenter);
-          map.setCenter(newCenter);
-        } else {
-          console.error('Geocoding failed:', status);
-        }
+    // Definer en Promise-basert geocoding funksjon
+    function geocodeAddress(): Promise<void> {
+      return new Promise((resolve, reject) => {
+        geocoder.geocode({ address: siteConfig.contact.address }, (results, status) => {
+          if (status === 'OK' && results && results[0]) {
+            const location = results[0].geometry.location;
+            const newCenter = {
+              lat: location.lat(),
+              lng: location.lng()
+            };
+            setCenter(newCenter);
+            map.setCenter(newCenter);
+            resolve();
+          } else {
+            console.error('Geocoding failed:', status);
+            reject(new Error(`Geocoding failed: ${status}`));
+          }
+        });
       });
-    };
+    }
   
-    performGeocoding();
+    // Kall funksjonen
+    geocodeAddress().catch(error => {
+      console.error('Error during geocoding:', error);
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
