@@ -34,14 +34,6 @@ export default function Kontakt() {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
 
-  // Og så bruk errors i form-validering visning:
-{errors.email && (
-  <p className="text-red-500 text-sm mt-1">{errors.email}</p>
-)}
-
-
-
-
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -223,6 +215,9 @@ export default function Kontakt() {
                 className="w-full p-2 border border-amber-200 rounded-md"
                 required
               />
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+              )}
             </div>
 
             <div>
