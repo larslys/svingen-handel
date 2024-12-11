@@ -13,12 +13,22 @@ const defaultCenter = {
   lng: 10.5358183
 };
 
+type FormType = typeof FORM_TYPES[keyof typeof FORM_TYPES];
+
+type FormData = {
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+  type: FormType;
+};
+
 const FORM_TYPES = {
   CONTACT: 'contact',
   ORDER: 'order'
 } as const;
 
-const INITIAL_FORM_STATE = {
+const INITIAL_FORM_STATE: FormData = {
   name: '',
   email: '',
   phone: '',
@@ -26,10 +36,11 @@ const INITIAL_FORM_STATE = {
   type: FORM_TYPES.CONTACT
 };
 
+
 export default function Kontakt() {
   const [center, setCenter] = useState(defaultCenter);
   const [isMapLoading, setIsMapLoading] = useState(true);
-  const [formData, setFormData] = useState(INITIAL_FORM_STATE);
+  const [formData, setFormData] = useState<FormData>(INITIAL_FORM_STATE);
   const [status, setStatus] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -180,7 +191,10 @@ export default function Kontakt() {
               <select
                 id="type"
                 value={formData.type}
-                onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                onChange={(e) => {
+                  const newType = e.target.value as FormType;
+                  setFormData({ ...formData, type: newType });
+                }}
                 className="w-full p-2 border border-amber-200 rounded-md"
                 required
               >
